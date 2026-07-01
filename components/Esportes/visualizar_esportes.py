@@ -5,7 +5,7 @@ class AplicativoCadastro:
     def __init__(self, root):
         self.root = root
         self.root.title("Sistema de Inscrição em Modalidades")
-        self.root.geometry("400x350")
+        self.root.geometry("400x450") 
         
         self.label_titulo = tk.Label(
             root, text="Modalidades Disponíveis", font=("Arial", 16, "bold"), pady=10
@@ -13,35 +13,25 @@ class AplicativoCadastro:
         self.label_titulo.pack()
 
         self.label_instrucao = tk.Label(
-            root, text="Selecione uma modalidade abaixo:", font=("Arial", 11)
+            root, text="Clique em uma modalidade para se inscrever:", font=("Arial", 11)
         )
         self.label_instrucao.pack(pady=5)
 
-        self.listbox_modalidades = tk.Listbox(root, font=("Arial", 12), selectmode=tk.SINGLE)
-        modalidades = ["Futebol", "Natação", "Vôlei", "Basquete", "Academia", "Judô"]
+        modalidades = ["Futebol", "Natação", "Vôlei", "Basquete", "", "Judô"]
+        
         for mod in modalidades:
-            self.listbox_modalidades.insert(tk.END, mod)
-        self.listbox_modalidades.pack(pady=10, fill=tk.BOTH, expand=True, padx=30)
+            btn_mod = tk.Button(
+                root,
+                text=mod,
+                font=("Arial", 12),
+                bg="#E0E0E0",      
+                fg="black",         
+                activebackground="#BDBDBD", 
+                command=lambda m=mod: self.abrir_janela_confirmacao(m)
+            )
+            btn_mod.pack(pady=4, fill=tk.X, padx=40)
 
-        self.btn_cadastrar = tk.Button(
-            root, 
-            text="Inscrever-se", 
-            font=("Arial", 12, "bold"), 
-            bg="#4CAF50", 
-            fg="white", 
-            command=self.abrir_janela_confirmacao
-        )
-        self.btn_cadastrar.pack(pady=15)
-
-    def abrir_janela_confirmacao(self):
-        selecao = self.listbox_modalidades.curselection()
-        
-        if not selecao:
-            messagebox.showwarning("Aviso", "Por favor, selecione uma modalidade antes de continuar!")
-            return
-        
-        modalidade_escolhida = self.listbox_modalidades.get(selecao[0])
-
+    def abrir_janela_confirmacao(self, modalidade_escolhida):
         self.janela_cadastro = tk.Toplevel(self.root)
         self.janela_cadastro.title("Confirmar Cadastro")
         self.janela_cadastro.geometry("350x280")
