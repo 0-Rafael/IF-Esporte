@@ -1,0 +1,27 @@
+{
+    "Futebol": {
+        "alunos": [],
+        "QuantidadeVagas": 20,
+        "ProfessorResponsavel": "Nadson"
+    },
+    "Handebol": {
+        "alunos": [],
+        "QuantidadeVagas": 20,
+        "ProfessorResponsavel": "Monica"
+    },
+    "Nata\u00e7\u00e3o": {
+        "alunos": [],
+        "QuantidadeVagas": 10,
+        "ProfessorResponsavel": "Matheus"
+    },
+    "Volei": {
+        "alunos": [],
+        "QuantidadeVagas": 20,
+        "ProfessorResponsavel": "Monica"
+    },
+    "Tenis De Mesa": {
+        "alunos": [],
+        "QuantidadeVagas": 5,
+        "ProfessorResponsavel": "Monica"
+    }
+}

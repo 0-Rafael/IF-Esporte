@@ -1,3 +1,4 @@
+from components.Esportes.visualizar_esportes import JanelaCadastro
 def main():
     import tkinter as tk
 
@@ -5,7 +6,7 @@ def main():
     janela.title("Projeto Tkinter - Componentes")
     janela.geometry("980x680")
     janela.minsize(820, 560)
-    
+    cadastro = JanelaCadastro(janela)
 
     janela.mainloop()
 

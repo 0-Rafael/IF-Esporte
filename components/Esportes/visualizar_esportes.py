@@ -1,16 +1,16 @@
 import ttkbootstrap as tk
 from tkinter import messagebox
 from ttkbootstrap.constants import *
-
-class AplicativoCadastro:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Portal de Inscrições")
-        self.root.geometry("420x500") 
+from components.database.dados import Modalidades
+class JanelaCadastro:
+    def __init__(self, janela):
+        self.janela = janela
+        self.janela.title("Portal de Inscrições")
+        self.janela.geometry("420x500")
+        self.modalidades = Modalidades("components/database/modalidades.json") 
         
-        # Header
         self.banner = tk.Label(
-            root, 
+            janela, 
             text="PORTAL ESPORTIVO", 
             foreground="#aaaaaa",
             font=("Helvetica", 14, "bold"), 
@@ -20,25 +20,28 @@ class AplicativoCadastro:
         self.banner.pack(fill=X, ipady=15, pady=(0, 15))
 
         self.label_instrucao = tk.Label(
-            root, 
+            janela, 
             text="Selecione a modalidade desejada:", 
             font=("Helvetica", 11, "bold"),
             bootstyle="secondary"
         )
         self.label_instrucao.pack(pady=10)
-
-        modalidades = ["Futebol", "Natação", "Vôlei", "Basquete", "Handebol"]
         
-        self.frame_botoes = tk.Frame(root)
+        self.frame_botoes = tk.Frame(janela)
         self.frame_botoes.pack(fill=BOTH, expand=True, padx=40)
-        btn_t = tk.Button()
-        btn_t.pack(pady=2, fill="y")
+        
+        self.criar_botoes()
 
-        # mapeando os botoes
+    def criar_botoes(self):
+        for botao in self.frame_botoes.winfo_children():
+            botao.destroy()
+        
+        modalidades = self.modalidades.ver_modalidades()
         for mod in modalidades:
+            vagas = modalidades[mod]["QuantidadeVagas"]
             btn_mod = tk.Button(
                 self.frame_botoes,
-                text=mod,
+                text=f"{mod}\n{str(vagas)} Vagas restantes",
                 bootstyle="info-outline",
                 cursor="hand2",
                 command=lambda m=mod: self.abrir_janela_confirmacao(m)
@@ -46,7 +49,12 @@ class AplicativoCadastro:
             btn_mod.pack(pady=5, fill=X)
 
     def abrir_janela_confirmacao(self, modalidade_escolhida):
-        self.janela_cadastro = tk.Toplevel(self.root)
+        opcoes = self.modalidades.ver_modalidades()
+        vagas = opcoes[modalidade_escolhida].get("QuantidadeVagas", 0) 
+        if vagas <= 0:
+            messagebox.showinfo("Atenção", "Todas as vagas foram preenchidas", parent=self.janela)
+            return
+        self.janela_cadastro = tk.Toplevel(self.janela)
         self.janela_cadastro.title("Confirmar Matrícula")
         self.janela_cadastro.geometry("360x320")
         self.janela_cadastro.resizable(False, False)
@@ -90,11 +98,7 @@ class AplicativoCadastro:
 
         mensagem = f"Inscrição realizada!\n\nAluno: {nome}\nModalidade: {modalidade}\nMatrícula: {matricula}"
         messagebox.showinfo("Sucesso!", mensagem)
-
+        self.modalidades.adiionar_aluno(nome, matricula, modalidade)
         self.janela_cadastro.destroy()
+        self.criar_botoes()
 
-if __name__ == "__main__":
-    # "darkly", "cosmo", "superhero", "morph", "journal"
-    root = tk.Window(themename="journal")
-    app = AplicativoCadastro(root)
-    root.mainloop()
