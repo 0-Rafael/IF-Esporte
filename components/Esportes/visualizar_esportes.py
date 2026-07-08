@@ -117,6 +117,10 @@ class JanelaCadastro:
         if not nome or not matricula:
             messagebox.showerror("Atenção", "Por favor, preencha todos os campos.", parent=self.janela_cadastro)
             return
+        elif nome != str or len(matricula) != 14:
+            messagebox.showerror("Atenção", "Nome ou matricula inválidos.", parent=self.janela_cadastro)
+            return
+
 
         mensagem = f"Inscrição realizada!\n\nAluno: {nome}\nModalidade: {modalidade}\nMatrícula: {matricula}"
         messagebox.showinfo("Sucesso!", mensagem)
