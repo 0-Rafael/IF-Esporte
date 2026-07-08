@@ -175,11 +175,12 @@ class JanelaCadastro:
         txt_area = tk.Text(janela_lista, wrap=WORD, height=15)
         txt_area.pack(fill=BOTH, expand=True, padx=20, pady=5)
         
-        dados = self.modalidades.ver_modalidades()
+        dados = self.listar_modalidade()
+        print(dados)
         texto_exibicao = ""
-        for mod, info in dados.items():
+        for mod in dados:
             texto_exibicao += f"--- {mod.upper()} ---\n"
-            alunos = info.get("Alunos", [])
+            alunos = mod['alunos']
             if not alunos:
                 texto_exibicao += "Nenhum aluno matriculado.\n"
             else:
@@ -191,6 +192,13 @@ class JanelaCadastro:
         txt_area.config(state=DISABLED) 
 
         tk.Button(janela_lista, text="Voltar", command=janela_lista.destroy, bootstyle="secondary").pack(pady=15, padx=20, fill=X)
+
+    def listar_modalidade(self):
+        lista = self.modalidades.ver_modalidades()
+        modalidade = []
+        for mod in lista:
+            modalidade.append(mod)
+        return modalidade
 
     def abrir_calendario(self):
         janela_cal = tk.Toplevel(self.janela)
