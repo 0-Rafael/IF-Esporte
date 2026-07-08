@@ -28,9 +28,30 @@ class JanelaCadastro:
         )
         self.label_instrucao.pack(pady=10)
         
-        self.frame_botoes = tk.Frame(janela)
-        self.frame_botoes.pack(fill=BOTH, expand=True, padx=40, pady=(0, 20))
+        self.container_lista = tk.Frame(janela)
+        self.container_lista.pack(fill=BOTH, expand=True, padx=40, pady=(0, 20))
+
+        self.canvas = tk.Canvas(self.container_lista, bd=0, highlightthickness=0)
+        self.scrollbar = tk.Scrollbar(self.container_lista, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
         
+        self.frame_botoes = tk.Frame(self.canvas)
+        
+        self.canvas_window = self.canvas.create_window((0, 0), window=self.frame_botoes, anchor="nw")
+        
+        self.frame_botoes.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        )
+        
+        self.canvas.bind(
+            "<Configure>",
+            lambda e: self.canvas.itemconfig(self.canvas_window, width=e.width)
+        )
+
+        self.canvas.pack(side=LEFT, fill=BOTH, expand=True)
+        self.scrollbar.pack(side=RIGHT, fill=Y)
+
         self.criar_botoes()
         self.criar_footer()
 
@@ -49,7 +70,6 @@ class JanelaCadastro:
                 command=lambda m=mod: self.abrir_janela_confirmacao(m)
             )
             btn_mod.pack(pady=5, fill=X)
-
     def criar_footer(self):
         self.frame_footer = tk.Frame(self.janela)
         self.frame_footer.pack(side=BOTTOM, fill=X, pady=15, padx=20)
@@ -167,28 +187,61 @@ class JanelaCadastro:
     def abrir_lista_alunos(self):
         janela_lista = tk.Toplevel(self.janela)
         janela_lista.title("Lista de Modalidades e Alunos")
-        janela_lista.geometry("450x400")
+        janela_lista.geometry("550x500") 
         janela_lista.grab_set()
 
-        tk.Label(janela_lista, text="Alunos Matriculados", font=("Helvetica", 12, "bold"), bootstyle="info").pack(pady=15)
+        tk.Label(janela_lista, text="Selecione uma Modalidade", font=("Helvetica", 12, "bold"), bootstyle="info").pack(pady=10)
 
-        txt_area = tk.Text(janela_lista, wrap=WORD, height=15)
-        txt_area.pack(fill=BOTH, expand=True, padx=20, pady=5)
+        frame_botoes = tk.Frame(janela_lista)
+        frame_botoes.pack(fill=X, padx=20, pady=5)
+
+        scrollbar_botoes = tk.Scrollbar(frame_botoes)
+        scrollbar_botoes.pack(side=RIGHT, fill=Y)
+
+        container_botoes = tk.Text(
+            frame_botoes, 
+            height=4, 
+            wrap=WORD, 
+            yscrollcommand=scrollbar_botoes.set,
+            bg=janela_lista.cget("bg")
+        )
+        container_botoes.pack(side=LEFT, fill=X, expand=True)
+        scrollbar_botoes.config(command=container_botoes.yview)
+
+        txt_area = tk.Text(janela_lista, wrap=WORD, height=12)
+        txt_area.pack(fill=BOTH, expand=True, padx=20, pady=10)
+        txt_area.insert(END, "Clique em uma das modalidades acima para ver os alunos matriculados.")
+        txt_area.config(state=DISABLED) 
         
         dados = self.modalidades.ver_modalidades()
-        texto_exibicao = ""
-        for mod in dados:
-            texto_exibicao += f"--- {mod.upper()} ---\n"
-            alunos = dados[mod]['alunos']
+
+        def exibir_alunos_da_modalidade(modalidade_selecionada):
+            txt_area.config(state=NORMAL)
+            txt_area.delete("1.0", END)
+            
+            alunos = dados[modalidade_selecionada]['alunos']
+            texto_exibicao = f"--- {modalidade_selecionada.upper()} ---\n"
+            
             if not alunos:
                 texto_exibicao += "Nenhum aluno matriculado.\n"
             else:
                 for aluno in alunos:
-                    texto_exibicao += f"- {aluno["nome"] } -- {aluno["matricula"]}\n"
-            texto_exibicao += "\n"
+                    texto_exibicao += f"- {aluno['nome']} -- {aluno['matricula']}\n"
             
-        txt_area.insert(END, texto_exibicao)
-        txt_area.config(state=DISABLED) 
+            txt_area.insert(END, texto_exibicao)
+            txt_area.config(state=DISABLED)
+
+        for mod in dados:
+            btn = tk.Button(
+                container_botoes, 
+                text=mod.upper(), 
+                bootstyle="outline-info",
+                command=lambda m=mod: exibir_alunos_da_modalidade(m)
+            )
+            container_botoes.window_create(END, window=btn)
+            container_botoes.insert(END, "  ")
+
+        container_botoes.config(state=DISABLED)
 
         tk.Button(janela_lista, text="Voltar", command=janela_lista.destroy, bootstyle="secondary").pack(pady=15, padx=20, fill=X)
 
