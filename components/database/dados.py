@@ -29,7 +29,7 @@ class Modalidades:
             esporte = esporte.capitalize()
             nome = nome.capitalize()
             dados = self.ver_modalidades()
-            aluno = {"nome": nome, "matriula": matricula}
+            aluno = {"nome": nome, "matricula": matricula}
             dados[esporte]["alunos"].append(aluno)
             dados[esporte]["QuantidadeVagas"] = dados[esporte]["QuantidadeVagas"] - 1
             with open(self.caminho, "w", encoding="utf-8") as arquivo:

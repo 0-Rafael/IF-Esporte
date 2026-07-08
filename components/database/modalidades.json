@@ -3,7 +3,7 @@
         "alunos": [
             {
                 "nome": "Matheus",
-                "matriula": "20251174010015"
+                "matricula": "20251174010015"
             }
         ],
         "QuantidadeVagas": 19,
@@ -28,5 +28,10 @@
         "alunos": [],
         "QuantidadeVagas": 5,
         "ProfessorResponsavel": "Monica"
+    },
+    "Xadre": {
+        "alunos": [],
+        "QuantidadeVagas": 20,
+        "ProfessorResponsavel": "Wesley"
     }
 }
