@@ -1,7 +1,12 @@
 {
     "Futebol": {
-        "alunos": [],
-        "QuantidadeVagas": 20,
+        "alunos": [
+            {
+                "nome": "Matheus",
+                "matriula": "20251174010015"
+            }
+        ],
+        "QuantidadeVagas": 19,
         "ProfessorResponsavel": "Nadson"
     },
     "Handebol": {
