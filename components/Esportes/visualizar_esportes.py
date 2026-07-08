@@ -130,24 +130,28 @@ class JanelaCadastro:
     def abrir_nova_modalidade(self):
         janela_nova = tk.Toplevel(self.janela)
         janela_nova.title("Cadastrar Nova Modalidade")
-        janela_nova.geometry("360x320")
+        janela_nova.geometry("360x380")
         janela_nova.grab_set()
 
         tk.Label(janela_nova, text="Nova Modalidade", font=("Helvetica", 12, "bold"), bootstyle="success").pack(pady=20)
 
         tk.Label(janela_nova, text="Nome da Modalidade", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
-        entry_mod = tk.Entry(janela_nova, bootstyle="success")
-        entry_mod.pack(fill=X, padx=35, pady=(2, 12))
+        entrada_modalidade = tk.Entry(janela_nova, bootstyle="success")
+        entrada_modalidade.pack(fill=X, padx=35, pady=(2, 12))
 
         tk.Label(janela_nova, text="Quantidade de Vagas", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
-        entry_vagas = tk.Entry(janela_nova, bootstyle="success")
-        entry_vagas.pack(fill=X, padx=35, pady=(2, 20))
+        entrada_vagas = tk.Entry(janela_nova, bootstyle="success")
+        entrada_vagas.pack(fill=X, padx=35, pady=(2, 20))
+
+        tk.Label(janela_nova, text="Professor Responsavel", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
+        entrada_professor = tk.Entry(janela_nova, bootstyle="success")
+        entrada_professor.pack(fill=X, padx=35, pady=(2, 20))
 
         def salvar_nova_modalidade():
-            nome_mod = entry_mod.get().strip()
-            vagas_str = entry_vagas.get().strip()
+            nome_mod = entrada_modalidade.get().strip()
+            vagas_str = entrada_vagas.get().strip()
             
-            if not nome_mod or not vagas_str.isdigit():
+            if not nome_mod or not vagas_str.isdigit() or not entrada_professor:
                 messagebox.showerror("Erro", "Preencha o nome e um número válido de vagas.", parent=janela_nova)
                 return
                 
