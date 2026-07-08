@@ -2,14 +2,13 @@ import ttkbootstrap as tk
 from tkinter import messagebox
 from ttkbootstrap.constants import *
 from components.database.dados import Modalidades
-
+from components.Users.Cadastro import SeletorDiasModalidade
 class JanelaCadastro:
     def __init__(self, janela):
         self.janela = janela
         self.janela.title("Portal de Inscrições")
         self.janela.geometry("420x580") 
         self.modalidades = Modalidades("components/database/modalidades.json") 
-        
         self.banner = tk.Label(
             janela, 
             text="PORTAL ESPORTIVO", 
@@ -121,6 +120,7 @@ class JanelaCadastro:
         self.entry_matricula = tk.Entry(self.janela_cadastro, bootstyle="info")
         self.entry_matricula.pack(fill=X, padx=35, pady=(2, 20))
 
+
         self.btn_salvar = tk.Button(
             self.janela_cadastro, 
             text="Finalizar Inscrição", 
@@ -166,6 +166,8 @@ class JanelaCadastro:
         tk.Label(janela_nova, text="Professor/monitor Responsavel", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
         entrada_professor = tk.Entry(janela_nova, bootstyle="success")
         entrada_professor.pack(fill=X, padx=35, pady=(2, 20))
+
+        
 
         def salvar_nova_modalidade():
             nome_mod = entrada_modalidade.get().strip()
