@@ -118,7 +118,7 @@ class JanelaCadastro:
             messagebox.showerror("Atenção", "Por favor, preencha todos os campos.", parent=self.janela_cadastro)
             return
         elif nome != str or len(matricula) != 14:
-            messagebox.showerror("Atenção", "Nome ou matricula inválidos.", parent=self.janela_cadastro)
+            messagebox.showerror("Atenção", "Nome ou matricula inválidos .", parent=self.janela_cadastro)
             return
 
 
