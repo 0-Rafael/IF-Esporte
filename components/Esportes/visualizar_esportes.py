@@ -203,7 +203,8 @@ class JanelaCadastro:
             height=4, 
             wrap=WORD, 
             yscrollcommand=scrollbar_botoes.set,
-            bg=janela_lista.cget("bg")
+            bg=janela_lista.cget("bg"),
+            cursor="arrow"
         )
         container_botoes.pack(side=LEFT, fill=X, expand=True)
         scrollbar_botoes.config(command=container_botoes.yview)
@@ -236,7 +237,9 @@ class JanelaCadastro:
                 container_botoes, 
                 text=mod.upper(), 
                 bootstyle="outline-info",
-                command=lambda m=mod: exibir_alunos_da_modalidade(m)
+                command=lambda m=mod: exibir_alunos_da_modalidade(m),
+                cursor="hand2",
+                padding=2
             )
             container_botoes.window_create(END, window=btn)
             container_botoes.insert(END, "  ")
