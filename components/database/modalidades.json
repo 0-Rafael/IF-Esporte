@@ -9,8 +9,13 @@
         ]
     },
     "Handebol": {
-        "alunos": [],
-        "QuantidadeVagas": 30,
+        "alunos": [
+            {
+                "nome": "Igor",
+                "matricula": "20251174010067"
+            }
+        ],
+        "QuantidadeVagas": 29,
         "ProfessorResponsavel": "Ynaiara",
         "Datas": [
             "Segunda",
