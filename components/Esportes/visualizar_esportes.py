@@ -152,7 +152,7 @@ class JanelaCadastro:
     def abrir_nova_modalidade(self):
         janela_nova = tk.Toplevel(self.janela)
         janela_nova.title("Cadastrar Nova Modalidade")
-        janela_nova.geometry("360x380")
+        janela_nova.geometry("560x500")
         janela_nova.grab_set()
 
         tk.Label(janela_nova, text="Nova Modalidade", font=("Helvetica", 12, "bold"), bootstyle="success").pack(pady=20)
@@ -169,17 +169,20 @@ class JanelaCadastro:
         entrada_professor = tk.Entry(janela_nova, bootstyle="success")
         entrada_professor.pack(fill=X, padx=35, pady=(2, 20))
 
+        calendario = SeletorDiasModalidade(janela_nova)
+
+
         def salvar_nova_modalidade():
             nome_mod = entrada_modalidade.get().strip()
             vagas_str = entrada_vagas.get().strip()
             profesor = entrada_professor.get().strip()
-            
-            if not nome_mod or not vagas_str.isdigit() or not profesor:
-                messagebox.showerror("Erro", "Preencha o nome e um número válido de vagas.", parent=janela_nova)
+            datas = calendario.obtener_dias_selecionados()
+            if not nome_mod or not vagas_str.isdigit() or not profesor or datas==None:
+                messagebox.showerror("Erro", "Preencha todos os campos.", parent=janela_nova)
                 return
                 
             messagebox.showinfo("Sucesso", f"Modalidade {nome_mod} cadastrada!", parent=janela_nova)
-            self.modalidades.adicionar_modalidades(nome_mod, int(vagas_str), profesor)
+            self.modalidades.adicionar_modalidades(nome_mod, int(vagas_str), profesor, datas)
             self.criar_botoes()
             janela_nova.destroy()
 

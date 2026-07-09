@@ -4,9 +4,9 @@ from ttkbootstrap.constants import *
 
 class SeletorDiasModalidade:
     def __init__(self, root):
-        self.root = root
-        self.root.title("Cadastro de Modalidade")
-        self.root.geometry("500x300")
+        # self.root = root
+        # self.root.title("Cadastro de Modalidade")
+        # self.root.geometry("300x300")
         
         # Dicionário para armazenar os dias da semana e suas respectivas variáveis (Booleanas)
         self.dias_semana = {
@@ -19,18 +19,18 @@ class SeletorDiasModalidade:
 
         # Frame Principal
         frame = ttk.Frame(root, padding=20)
-        frame.pack(fill="both", expand=True)
+        frame.pack(fill="x")
 
         # Título / Instrução
         ttk.Label(
             frame, 
             text="Selecione os dias da semana para a modalidade:", 
             font=("Helvetica", 12, "bold")
-        ).pack(anchor="w", pady=(0, 15))
+        ).pack(anchor="center", pady=(0, 2))
 
         # Frame horizontal para organizar os botões dos dias
         frame_dias = ttk.Frame(frame)
-        frame_dias.pack(fill="x", pady=10)
+        frame_dias.pack(fill="x", pady=5)
 
         # Criando os Checkbuttons estilizados como botões (Toolbutton)
         for dia, var in self.dias_semana.items():
@@ -45,25 +45,23 @@ class SeletorDiasModalidade:
             chk.pack(side="left", expand=True, fill="x", padx=2)
 
         # Botão para salvar/confirmar
-        btn_confirmar = ttk.Button(
-            frame, 
-            text="Salvar Dias da Modalidade", 
-            command=self.obtener_dias_selecionados, 
-            bootstyle="success"
-        )
-        btn_confirmar.pack(pady=25)
+        # btn_confirmar = ttk.Button(
+        #     frame, 
+        #     text="Salvar Dias da Modalidade", 
+        #     command=self.obtener_dias_selecionados, 
+        #     bootstyle="success"
+        # )
+        # btn_confirmar.pack(pady=25)
 
         # Label para mostrar o resultado do clique
-        self.lbl_resultado = ttk.Label(frame, text="", font=("Helvetica", 10, "italic"))
-        self.lbl_resultado.pack(pady=5)
+        
 
     def obtener_dias_selecionados(self):
         # Filtra o dicionário pegando apenas os dias onde o valor do BooleanVar é True
         selecionados = [dia for dia, var in self.dias_semana.items() if var.get()]
         
         if selecionados:
-            texto_resultado = f"Dias selecionados: {', '.join(selecionados)}"
-            self.lbl_resultado.config(text=texto_resultado, bootstyle="success")
+            return selecionados
         else:
-            self.lbl_resultado.config(text="Nenhum dia selecionado!", bootstyle="danger")
+            return None
             

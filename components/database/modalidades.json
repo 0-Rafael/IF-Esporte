@@ -1,42 +1,50 @@
 {
-    "Futebol": {
-        "alunos": [
-            {
-                "nome": "Matheus",
-                "matricula": "20251174010015"
-            }
-        ],
-        "QuantidadeVagas": 19,
-        "ProfessorResponsavel": "Nadson"
+    "Futebol masculino": {
+        "alunos": [],
+        "QuantidadeVagas": 21,
+        "ProfessorResponsavel": "Nadson",
+        "Datas": [
+            "Ter\u00e7a",
+            "Quinta"
+        ]
     },
     "Handebol": {
         "alunos": [],
-        "QuantidadeVagas": 20,
-        "ProfessorResponsavel": "Monica"
+        "QuantidadeVagas": 30,
+        "ProfessorResponsavel": "Ynaiara",
+        "Datas": [
+            "Segunda",
+            "Ter\u00e7a",
+            "Quarta",
+            "Quinta"
+        ]
     },
     "Nata\u00e7\u00e3o": {
         "alunos": [],
-        "QuantidadeVagas": 10,
-        "ProfessorResponsavel": "Matheus"
+        "QuantidadeVagas": 8,
+        "ProfessorResponsavel": "Gabriel",
+        "Datas": [
+            "Quarta",
+            "Quinta",
+            "Sexta"
+        ]
+    },
+    "Tenis de mesa": {
+        "alunos": [],
+        "QuantidadeVagas": 5,
+        "ProfessorResponsavel": "Monica",
+        "Datas": [
+            "Ter\u00e7a",
+            "Quinta"
+        ]
     },
     "Volei": {
         "alunos": [],
-        "QuantidadeVagas": 20,
-        "ProfessorResponsavel": "Monica"
-    },
-    "Tenis De Mesa": {
-        "alunos": [],
-        "QuantidadeVagas": 5,
-        "ProfessorResponsavel": "Monica"
-    },
-    "Xadrez": {
-        "alunos": [],
-        "QuantidadeVagas": 20,
-        "ProfessorResponsavel": "Wesley"
-    },
-    "Teste1": {
-        "alunos": [],
-        "QuantidadeVagas": 20,
-        "ProfessorResponsavel": "Eu"
+        "QuantidadeVagas": 30,
+        "ProfessorResponsavel": "Monica",
+        "Datas": [
+            "Quarta",
+            "Sexta"
+        ]
     }
 }

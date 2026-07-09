@@ -9,7 +9,7 @@ class Modalidades:
             return dados
         except (json.JSONDecodeError, FileNotFoundError):
             return {}
-    def adicionar_modalidades(self, modalidade: str, quantidade_vagas: int, professor: str):
+    def adicionar_modalidades(self, modalidade: str, quantidade_vagas: int, professor: str, datas: list):
         modalidade = modalidade.capitalize()
         professor = professor.capitalize()
         modalidades = self.ver_modalidades()
@@ -20,7 +20,8 @@ class Modalidades:
         modalidades[modalidade] = {
             "alunos": [],
             "QuantidadeVagas": quantidade_vagas,
-            "ProfessorResponsavel": professor
+            "ProfessorResponsavel": professor,
+            "Datas": datas
         }
         with open(self.caminho, "w", encoding="utf-8") as arquivo:
             json.dump(modalidades, arquivo, indent=4)
