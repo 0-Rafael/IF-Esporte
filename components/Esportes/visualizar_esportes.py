@@ -3,12 +3,14 @@ from tkinter import messagebox
 from ttkbootstrap.constants import *
 from components.database.dados import Modalidades
 from components.Users.Cadastro import SeletorDiasModalidade
+
 class JanelaCadastro:
     def __init__(self, janela):
         self.janela = janela
         self.janela.title("Portal de Inscrições")
         self.janela.geometry("420x580") 
         self.modalidades = Modalidades("components/database/modalidades.json") 
+        
         self.banner = tk.Label(
             janela, 
             text="PORTAL ESPORTIVO", 
@@ -69,6 +71,7 @@ class JanelaCadastro:
                 command=lambda m=mod: self.abrir_janela_confirmacao(m)
             )
             btn_mod.pack(pady=5, fill=X)
+
     def criar_footer(self):
         self.frame_footer = tk.Frame(self.janela)
         self.frame_footer.pack(side=BOTTOM, fill=X, pady=15, padx=20)
@@ -120,7 +123,6 @@ class JanelaCadastro:
         self.entry_matricula = tk.Entry(self.janela_cadastro, bootstyle="info")
         self.entry_matricula.pack(fill=X, padx=35, pady=(2, 20))
 
-
         self.btn_salvar = tk.Button(
             self.janela_cadastro, 
             text="Finalizar Inscrição", 
@@ -137,16 +139,16 @@ class JanelaCadastro:
         if not nome or not matricula:
             messagebox.showerror("Atenção", "Por favor, preencha todos os campos.", parent=self.janela_cadastro)
             return
-        elif nome != str or len(matricula) != 14:
-            messagebox.showerror("Atenção", "Nome ou matricula inválidos .", parent=self.janela_cadastro)
+        elif any(char.isdigit() for char in nome) or len(matricula) != 14:
+            messagebox.showerror("Atenção", "Nome inválido ou matrícula deve ter 14 dígitos.", parent=self.janela_cadastro)
             return
-
 
         mensagem = f"Inscrição realizada!\n\nAluno: {nome}\nModalidade: {modalidade}\nMatrícula: {matricula}"
         messagebox.showinfo("Sucesso!", mensagem)
         self.modalidades.adiionar_aluno(nome, matricula, modalidade)
         self.janela_cadastro.destroy()
         self.criar_botoes() 
+
     def abrir_nova_modalidade(self):
         janela_nova = tk.Toplevel(self.janela)
         janela_nova.title("Cadastrar Nova Modalidade")
@@ -163,16 +165,14 @@ class JanelaCadastro:
         entrada_vagas = tk.Entry(janela_nova, bootstyle="success")
         entrada_vagas.pack(fill=X, padx=35, pady=(2, 20))
 
-        tk.Label(janela_nova, text="Professor/monitor Responsavel", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
+        tk.Label(janela_nova, text="Professor/monitor Responsável", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
         entrada_professor = tk.Entry(janela_nova, bootstyle="success")
         entrada_professor.pack(fill=X, padx=35, pady=(2, 20))
-
-        
 
         def salvar_nova_modalidade():
             nome_mod = entrada_modalidade.get().strip()
             vagas_str = entrada_vagas.get().strip()
-            profesor = entrada_professor.get()
+            profesor = entrada_professor.get().strip()
             
             if not nome_mod or not vagas_str.isdigit() or not profesor:
                 messagebox.showerror("Erro", "Preencha o nome e um número válido de vagas.", parent=janela_nova)
@@ -247,24 +247,76 @@ class JanelaCadastro:
             container_botoes.insert(END, "  ")
 
         container_botoes.config(state=DISABLED)
-
         tk.Button(janela_lista, text="Voltar", command=janela_lista.destroy, bootstyle="secondary").pack(pady=15, padx=20, fill=X)
 
     def abrir_calendario(self):
         janela_cal = tk.Toplevel(self.janela)
         janela_cal.title("Calendário Esportivo")
-        janela_cal.geometry("400x350")
+        janela_cal.geometry("450x550") 
         janela_cal.grab_set()
 
-        tk.Label(janela_cal, text="Calendário de Eventos", font=("Helvetica", 12, "bold"), bootstyle="warning").pack(pady=15)
+        tk.Label(
+            janela_cal, 
+            text="Calendário de treinos da Semana", 
+            font=("Helvetica", 14, "bold"), 
+            bootstyle="warning"
+        ).pack(pady=10)
 
-        txt_area = tk.Text(janela_cal, wrap=WORD, height=12)
-        txt_area.pack(fill=BOTH, expand=True, padx=20, pady=5)
+        container = tk.Frame(janela_cal)
+        container.pack(fill=BOTH, expand=True, padx=15, pady=5)
 
-
-        texto_exibicao = "Calendario modalidades"
+        canvas = tk.Canvas(container, borderwidth=0, highlightthickness=0)
+        scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
         
-        txt_area.insert(END, texto_exibicao)
-        txt_area.config(state=DISABLED)
+        scrollable_frame = tk.Frame(canvas)
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
 
-        tk.Button(janela_cal, text="Voltar", command=janela_cal.destroy, bootstyle="secondary").pack(pady=15, padx=20, fill=X)
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", width=400)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        dias_calendario = {}
+        dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"]
+
+        for dia in dias_semana:
+            frame_dia = tk.LabelFrame(scrollable_frame, text=dia, bootstyle="info", padding=10)
+            frame_dia.pack(fill=X, expand=True, pady=8, padx=5)
+            
+            dias_calendario[dia] = frame_dia
+            
+            lbl_vazio = tk.Label(frame_dia, text="Nenhum evento agendado", font=("Helvetica", 9, "italic"), foreground="gray")
+            lbl_vazio.pack(anchor="w")
+            frame_dia.lbl_vazio = lbl_vazio
+
+
+        dados_modalidades = self.modalidades.ver_modalidades()
+
+        for nome_modalidade, info in dados_modalidades.items():
+            dias_treino = info.get("Dias", [])  
+            horario = info.get("Horario", "Horário não definido")
+            professor = info.get("professor", "Sem responsável")
+
+            for dia in dias_treino:
+                if dia in dias_calendario:
+                    f_dia = dias_calendario[dia]
+                    
+                    if hasattr(f_dia, 'lbl_vazio') and f_dia.lbl_vazio.winfo_exists():
+                        f_dia.lbl_vazio.destroy()
+                    
+                    card = tk.Frame(f_dia, bootstyle="light", padding=8)
+                    card.pack(fill=X, pady=4)
+                    
+                    texto_card = f" {nome_modalidade.upper()} - {horario}\n Prof(a): {professor}"
+                    tk.Label(card, text=texto_card, font=("Helvetica", 9, "bold"), justify=LEFT).pack(anchor="w")
+
+        tk.Button(
+            janela_cal, 
+            text="Voltar", 
+            command=janela_cal.destroy, 
+            bootstyle="secondary"
+        ).pack(pady=15, padx=15, fill=X)
