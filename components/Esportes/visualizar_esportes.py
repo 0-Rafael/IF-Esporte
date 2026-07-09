@@ -2,7 +2,7 @@ import ttkbootstrap as tk
 from tkinter import messagebox
 from ttkbootstrap.constants import *
 from components.database.dados import Modalidades
-from components.Users.Cadastro import SeletorDiasModalidade
+from components.Calendario.Calendario import SeletorDiasModalidade
 
 class JanelaCadastro:
     def __init__(self, janela):
@@ -265,61 +265,61 @@ class JanelaCadastro:
             bootstyle="warning"
         ).pack(pady=10)
 
-        container = tk.Frame(janela_cal)
-        container.pack(fill=BOTH, expand=True, padx=15, pady=5)
+        # container = tk.Frame(janela_cal)
+        # container.pack(fill=BOTH, expand=True, padx=15, pady=5)
 
-        canvas = tk.Canvas(container, borderwidth=0, highlightthickness=0)
-        scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
+        # canvas = tk.Canvas(container, borderwidth=0, highlightthickness=0)
+        # scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
         
-        scrollable_frame = tk.Frame(canvas)
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-        )
+        # scrollable_frame = tk.Frame(canvas)
+        # scrollable_frame.bind(
+        #     "<Configure>",
+        #     lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        # )
 
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", width=400)
-        canvas.configure(yscrollcommand=scrollbar.set)
+        # canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", width=400)
+        # canvas.configure(yscrollcommand=scrollbar.set)
 
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
+        # canvas.pack(side="left", fill="both", expand=True)
+        # scrollbar.pack(side="right", fill="y")
 
-        dias_calendario = {}
-        dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"]
+        # dias_calendario = {}
+        # dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"]
 
-        for dia in dias_semana:
-            frame_dia = tk.LabelFrame(scrollable_frame, text=dia, bootstyle="info", padding=10)
-            frame_dia.pack(fill=X, expand=True, pady=8, padx=5)
+        # for dia in dias_semana:
+        #     frame_dia = tk.LabelFrame(scrollable_frame, text=dia, bootstyle="info", padding=10)
+        #     frame_dia.pack(fill=X, expand=True, pady=8, padx=5)
             
-            dias_calendario[dia] = frame_dia
+        #     dias_calendario[dia] = frame_dia
             
-            lbl_vazio = tk.Label(frame_dia, text="Nenhum evento agendado", font=("Helvetica", 9, "italic"), foreground="gray")
-            lbl_vazio.pack(anchor="w")
-            frame_dia.lbl_vazio = lbl_vazio
+        #     lbl_vazio = tk.Label(frame_dia, text="Nenhum evento agendado", font=("Helvetica", 9, "italic"), foreground="gray")
+        #     lbl_vazio.pack(anchor="w")
+        #     lbl_vazio = lbl_vazio
 
 
-        dados_modalidades = self.modalidades.ver_modalidades()
+        # dados_modalidades = self.modalidades.ver_modalidades()
 
-        for nome_modalidade, info in dados_modalidades.items():
-            dias_treino = info.get("Dias", [])  
-            horario = info.get("Horario", "Horário não definido")
-            professor = info.get("professor", "Sem responsável")
+        # for nome_modalidade, info in dados_modalidades.items():
+        #     dias_treino = info.get("Dias", [])  
+        #     horario = info.get("Horario", "Horário não definido")
+        #     professor = info.get("professor", "Sem responsável")
 
-            for dia in dias_treino:
-                if dia in dias_calendario:
-                    f_dia = dias_calendario[dia]
+        #     for dia in dias_treino:
+        #         if dia in dias_calendario:
+        #             f_dia = dias_calendario[dia]
                     
-                    if hasattr(f_dia, 'lbl_vazio') and f_dia.lbl_vazio.winfo_exists():
-                        f_dia.lbl_vazio.destroy()
+        #             if hasattr(f_dia, 'lbl_vazio') and f_dia.lbl_vazio.winfo_exists():
+        #                 f_dia.lbl_vazio.destroy()
                     
-                    card = tk.Frame(f_dia, bootstyle="light", padding=8)
-                    card.pack(fill=X, pady=4)
+        #             card = tk.Frame(f_dia, bootstyle="light", padding=8)
+        #             card.pack(fill=X, pady=4)
                     
-                    texto_card = f" {nome_modalidade.upper()} - {horario}\n Prof(a): {professor}"
-                    tk.Label(card, text=texto_card, font=("Helvetica", 9, "bold"), justify=LEFT).pack(anchor="w")
+        #             texto_card = f" {nome_modalidade.upper()} - {horario}\n Prof(a): {professor}"
+        #             tk.Label(card, text=texto_card, font=("Helvetica", 9, "bold"), justify=LEFT).pack(anchor="w")
 
-        tk.Button(
-            janela_cal, 
-            text="Voltar", 
-            command=janela_cal.destroy, 
-            bootstyle="secondary"
-        ).pack(pady=15, padx=15, fill=X)
+        # tk.Button(
+        #     janela_cal, 
+        #     text="Voltar", 
+        #     command=janela_cal.destroy, 
+        #     bootstyle="secondary"
+        # ).pack(pady=15, padx=15, fill=X)
