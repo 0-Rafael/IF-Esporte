@@ -135,12 +135,15 @@ class JanelaCadastro:
     def salvar_dados(self, modalidade):
         nome = self.entry_nome.get().strip()
         matricula = self.entry_matricula.get().strip()
-
+        teste = self.modalidades.verificar_quantidade_matricula(matricula)
         if not nome or not matricula:
             messagebox.showerror("Atenção", "Por favor, preencha todos os campos.", parent=self.janela_cadastro)
             return
         elif any(char.isdigit() for char in nome) or len(matricula) != 14:
             messagebox.showerror("Atenção", "Nome inválido ou matrícula deve ter 14 dígitos.", parent=self.janela_cadastro)
+            return
+        elif teste:
+            messagebox.showerror("Atenção", "O aluno ja esta participando de duas modalidas", parent=self.janela_cadastro)
             return
 
         mensagem = f"Inscrição realizada!\n\nAluno: {nome}\nModalidade: {modalidade}\nMatrícula: {matricula}"

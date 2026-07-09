@@ -1,7 +1,7 @@
 {
     "Futebol masculino": {
         "alunos": [],
-        "QuantidadeVagas": 21,
+        "QuantidadeVagas": 20,
         "ProfessorResponsavel": "Nadson",
         "Datas": [
             "Ter\u00e7a",
@@ -35,8 +35,13 @@
         ]
     },
     "Tenis de mesa": {
-        "alunos": [],
-        "QuantidadeVagas": 5,
+        "alunos": [
+            {
+                "nome": "Igor",
+                "matricula": "20251174010067"
+            }
+        ],
+        "QuantidadeVagas": 4,
         "ProfessorResponsavel": "Monica",
         "Datas": [
             "Ter\u00e7a",
@@ -45,7 +50,7 @@
     },
     "Volei": {
         "alunos": [],
-        "QuantidadeVagas": 30,
+        "QuantidadeVagas": 29,
         "ProfessorResponsavel": "Monica",
         "Datas": [
             "Quarta",

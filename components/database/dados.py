@@ -37,4 +37,13 @@ class Modalidades:
                 json.dump(dados, arquivo, indent=4)
         except KeyError:
             print("Modalidade nao encontrada")
-t1 = Modalidades("components/database/modalidades.json")
+    def verificar_quantidade_matricula(self, matricula: str):
+        modalidades = self.ver_modalidades()
+        quantidade = 0
+        for key,value in modalidades.items():
+            for alunos in value["alunos"]:
+                if alunos["matricula"]==matricula:
+                    quantidade+=1
+        if quantidade>=2:
+            return True
+        return False
