@@ -9,13 +9,8 @@
         ]
     },
     "Handebol": {
-        "alunos": [
-            {
-                "nome": "Igor",
-                "matricula": "20251174010067"
-            }
-        ],
-        "QuantidadeVagas": 29,
+        "alunos": [],
+        "QuantidadeVagas": 30,
         "ProfessorResponsavel": "Ynaiara",
         "Datas": [
             "Segunda",
@@ -35,13 +30,8 @@
         ]
     },
     "Tenis de mesa": {
-        "alunos": [
-            {
-                "nome": "Igor",
-                "matricula": "20251174010067"
-            }
-        ],
-        "QuantidadeVagas": 4,
+        "alunos": [],
+        "QuantidadeVagas": 5,
         "ProfessorResponsavel": "Monica",
         "Datas": [
             "Ter\u00e7a",

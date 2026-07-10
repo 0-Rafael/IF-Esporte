@@ -37,6 +37,23 @@ class Modalidades:
                 json.dump(dados, arquivo, indent=4)
         except KeyError:
             print("Modalidade nao encontrada")
+    def remover_aluno(self, nome, matricula, esporte):
+        dados = self.ver_modalidades()
+        esporte = esporte.capitalize()
+        nome = nome.capitalize()
+        
+        if esporte in dados:
+            for indice, aluno in enumerate(dados[esporte]["alunos"]):
+                if aluno["matricula"] == matricula and aluno["nome"] == nome:
+                    dados[esporte]["alunos"].pop(indice)
+                    dados[esporte]["QuantidadeVagas"] += 1
+                    with open(self.caminho, "w", encoding="utf-8") as arquivo:
+                        json.dump(dados, arquivo, indent=4)
+                    return True
+        return False
+
+
+
     def verificar_quantidade_matricula(self, matricula: str):
         modalidades = self.ver_modalidades()
         quantidade = 0
@@ -47,3 +64,12 @@ class Modalidades:
         if quantidade>=2:
             return True
         return False
+    def cadastro_mesma_modalidade(self, matricula: str, esporte: str):
+        modalidades = self.ver_modalidades()
+        for key,value in modalidades.items():
+            if key==esporte:
+                for alunos in value["alunos"]:
+                    if alunos["matricula"]==matricula:
+                        return True
+        return False
+

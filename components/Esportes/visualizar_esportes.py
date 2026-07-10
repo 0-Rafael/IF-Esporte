@@ -1,8 +1,10 @@
 import ttkbootstrap as tk
 from tkinter import messagebox
+import tkinter as ttk
 from ttkbootstrap.constants import *
 from components.database.dados import Modalidades
 from components.Calendario.Calendario import SeletorDiasModalidade
+from components.Esportes.Aba_exclusão import Exclusao
 
 class JanelaCadastro:
     def __init__(self, janela):
@@ -122,7 +124,7 @@ class JanelaCadastro:
         tk.Label(self.janela_cadastro, text="Número de Matrícula", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
         self.entry_matricula = tk.Entry(self.janela_cadastro, bootstyle="info")
         self.entry_matricula.pack(fill=X, padx=35, pady=(2, 20))
-
+        self.calendario = SeletorDiasModalidade(self.janela_cadastro)
         self.btn_salvar = tk.Button(
             self.janela_cadastro, 
             text="Finalizar Inscrição", 
@@ -136,8 +138,12 @@ class JanelaCadastro:
         nome = self.entry_nome.get().strip()
         matricula = self.entry_matricula.get().strip()
         teste = self.modalidades.verificar_quantidade_matricula(matricula)
-        if not nome or not matricula:
+        datas = self.calendario.obtener_dias_selecionados()
+        if not nome or not matricula or not any(datas):
             messagebox.showerror("Atenção", "Por favor, preencha todos os campos.", parent=self.janela_cadastro)
+            return
+        elif self.modalidades.cadastro_mesma_modalidade(matricula, modalidade):
+            messagebox.showerror("Atenção", "O aluno já esta cadastrado nessa modalidade", parent=self.janela_cadastro)
             return
         elif any(char.isdigit() for char in nome) or len(matricula) != 14:
             messagebox.showerror("Atenção", "Nome inválido ou matrícula deve ter 14 dígitos.", parent=self.janela_cadastro)
@@ -213,31 +219,42 @@ class JanelaCadastro:
             bg=janela_lista.cget("bg"),
             cursor="arrow"
         )
+        nome_modalidade = ""
         container_botoes.pack(side=LEFT, fill=X, expand=True)
         scrollbar_botoes.config(command=container_botoes.yview)
-
-        txt_area = tk.Text(janela_lista, wrap=WORD, height=12)
+        texto_modalidade = tk.Label(janela_lista,text=nome_modalidade.upper(), font=("Helvetica", 12, "bold"), bootstyle="info")
+        texto_modalidade.pack(pady=10)
+        area_teste = tk.Frame(janela_lista)
+        area_teste.pack(fill=X, pady=5)
+        txt_area = ttk.Listbox(area_teste)
         txt_area.pack(fill=BOTH, expand=True, padx=20, pady=10)
         txt_area.insert(END, "Clique em uma das modalidades acima para ver os alunos matriculados.")
-        txt_area.config(state=DISABLED) 
+        txt_area.config(state=DISABLED)
         
         dados = self.modalidades.ver_modalidades()
 
         def exibir_alunos_da_modalidade(modalidade_selecionada):
+            nonlocal nome_modalidade
+            # Recarregar dados do arquivo
+            dados.update(self.modalidades.ver_modalidades())
+            
+            # Limpar o Listbox corretamente
             txt_area.config(state=NORMAL)
-            txt_area.delete("1.0", END)
+            txt_area.delete(0, END)
             
             alunos = dados[modalidade_selecionada]['alunos']
-            texto_exibicao = f"--- {modalidade_selecionada.upper()} ---\n"
+            nome_modalidade = modalidade_selecionada
+            texto_modalidade.configure(text=nome_modalidade.upper())
+            # Adicionar título
+            # txt_area.insert(END, f"--- {modalidade_selecionada.upper()} ---")
             
             if not alunos:
-                texto_exibicao += "Nenhum aluno matriculado.\n"
+                txt_area.insert(END, "Nenhum aluno matriculado.")
+                txt_area.config(state=DISABLED)
             else:
+                txt_area.config(state=NORMAL)
                 for aluno in alunos:
-                    texto_exibicao += f"- {aluno['nome']} -- {aluno['matricula']}\n"
-            
-            txt_area.insert(END, texto_exibicao)
-            txt_area.config(state=DISABLED)
+                    txt_area.insert(END, f"- {aluno['nome']} -- {aluno['matricula']}")
 
         for mod in dados:
             btn = tk.Button(
@@ -250,9 +267,19 @@ class JanelaCadastro:
             )
             container_botoes.window_create(END, window=btn)
             container_botoes.insert(END, "  ")
-
+        teste = Exclusao(janela_lista)
         container_botoes.config(state=DISABLED)
-        tk.Button(janela_lista, text="Voltar", command=janela_lista.destroy, bootstyle="secondary").pack(pady=15, padx=20, fill=X)
+        
+        def recarregar_apos_remover():
+            if nome_modalidade:
+                exibir_alunos_da_modalidade(nome_modalidade)
+        
+        tk.Button(janela_lista, text="Voltar", command=janela_lista.destroy, bootstyle="secondary").pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
+        tk.Button(janela_lista, text="Remover Aluno", bootstyle="warning", command=lambda: teste.remover_aluno(txt_area, self.modalidades, nome_modalidade, callback=recarregar_apos_remover, callback_atualizacao_principal=self.criar_botoes)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
+        tk.Button(janela_lista, text="Remover Modalidade", bootstyle="warning").pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
+    def remover_aluno(self):
+        pass
+
 
     def abrir_calendario(self):
         janela_cal = tk.Toplevel(self.janela)
