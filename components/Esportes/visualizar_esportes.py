@@ -278,26 +278,25 @@ class JanelaCadastro:
     def remover_aluno(self):
         pass
 
-
     def abrir_calendario(self):
         janela_cal = tk.Toplevel(self.janela)
         janela_cal.title("Calendário Esportivo")
-        janela_cal.geometry("450x550") 
+        janela_cal.geometry("450x550")
         janela_cal.grab_set()
 
         tk.Label(
-            janela_cal, 
-            text="Calendário de treinos da Semana", 
-            font=("Helvetica", 14, "bold"), 
+            janela_cal,
+            text="Calendário de treinos da Semana",
+            font=("Helvetica", 14, "bold"),
             bootstyle="warning"
         ).pack(pady=10)
 
         container = tk.Frame(janela_cal)
-        container.pack(fill="both", expand=True, padx=15, pady=5) 
+        container.pack(fill="both", expand=True, padx=15, pady=5)
 
         canvas = tk.Canvas(container, borderwidth=0, highlightthickness=0)
         scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
-        
+
         scrollable_frame = tk.Frame(canvas)
         scrollable_frame.bind(
             "<Configure>",
@@ -310,21 +309,37 @@ class JanelaCadastro:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"]
+        dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira",]
+        info = self.modalidades.ver_modalidades()
 
         for dia in dias_semana:
             card = tk.Frame(scrollable_frame, borderwidth=1, relief="solid")
             card.pack(fill="x", padx=10, pady=10)
 
             tk.Label(
-                card, 
-                text=f"{dia}", 
+                card,
+                text=f"{dia}",
                 font=("Helvetica", 11, "bold")
             ).pack(anchor="w", padx=10, pady=(10, 5))
+            area_modalidades = tk.Frame(card)
+            area_modalidades.pack(fill="x", padx=10, pady=(0, 10))
+            dia_curto = dia.split('-')[0]
 
-            area_vazia = tk.Frame(card, height=50)
-            area_vazia.pack(fill="x", padx=10, pady=(0, 10))
-            info = self.modalidades.ver_modalidades()
-            print(info)
-            
-            tk.Label(area_vazia, text="sem treino definido", font=("Helvetica", 9, "italic")).pack(anchor="w")
+            modalidades_do_dia = []
+            for nome_modalidade, dados_modalidade in info.items():
+                if dia_curto in dados_modalidade['Datas']:
+                    modalidades_do_dia.append(nome_modalidade)
+            if modalidades_do_dia:
+                for mod in modalidades_do_dia:
+                    tk.Label(
+                        area_modalidades,
+                        text=f"• {mod}",
+                        font=("Helvetica", 10)
+                    ).pack(anchor="w", padx=10)
+            else:
+                tk.Label(
+                    area_modalidades,
+                    text="Sem treinos agendados",
+                    font=("Helvetica", 10, "italic"),
+                    fg="gray"
+                ).pack(anchor="w", padx=10)
