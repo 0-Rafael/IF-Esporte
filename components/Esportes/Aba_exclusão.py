@@ -37,3 +37,8 @@ class Exclusao:
             messagebox.showwarning("Atenção", "Selecione um aluno para remover.", parent=self.janela)
         except Exception as e:
             messagebox.showerror("Erro", f"Erro ao remover: {str(e)}", parent=self.janela)
+    def remover_modalidade(self, list_box: ttk.Listbox, instancia_modalidades: Modalidades, esporte: str, callback=None, callback_atualizacao_principal=None):
+        dados = instancia_modalidades.ver_modalidades()
+        del dados[esporte]
+        if esporte in instancia_modalidades.ver_modalidades():
+            instancia_modalidades.remover_modalidade(esporte)

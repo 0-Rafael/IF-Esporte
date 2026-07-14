@@ -124,7 +124,6 @@ class JanelaCadastro:
         tk.Label(self.janela_cadastro, text="Número de Matrícula", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
         self.entry_matricula = tk.Entry(self.janela_cadastro, bootstyle="info")
         self.entry_matricula.pack(fill=X, padx=35, pady=(2, 20))
-        self.calendario = SeletorDiasModalidade(self.janela_cadastro)
         self.btn_salvar = tk.Button(
             self.janela_cadastro, 
             text="Finalizar Inscrição", 
@@ -138,14 +137,13 @@ class JanelaCadastro:
         nome = self.entry_nome.get().strip()
         matricula = self.entry_matricula.get().strip()
         teste = self.modalidades.verificar_quantidade_matricula(matricula)
-        datas = self.calendario.obtener_dias_selecionados()
-        if not nome or not matricula or not any(datas):
+        if not nome or not matricula:
             messagebox.showerror("Atenção", "Por favor, preencha todos os campos.", parent=self.janela_cadastro)
             return
         elif self.modalidades.cadastro_mesma_modalidade(matricula, modalidade):
             messagebox.showerror("Atenção", "O aluno já esta cadastrado nessa modalidade", parent=self.janela_cadastro)
             return
-        elif any(char.isdigit() for char in nome) or len(matricula) != 14:
+        elif any(char.isdigit() for char in nome) or len(matricula) != 14 or not any(char.isnumeric() for char in matricula):
             messagebox.showerror("Atenção", "Nome inválido ou matrícula deve ter 14 dígitos.", parent=self.janela_cadastro)
             return
         elif teste:
@@ -276,7 +274,7 @@ class JanelaCadastro:
         
         tk.Button(janela_lista, text="Voltar", command=janela_lista.destroy, bootstyle="secondary").pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
         tk.Button(janela_lista, text="Remover Aluno", bootstyle="warning", command=lambda: teste.remover_aluno(txt_area, self.modalidades, nome_modalidade, callback=recarregar_apos_remover, callback_atualizacao_principal=self.criar_botoes)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
-        tk.Button(janela_lista, text="Remover Modalidade", bootstyle="warning").pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
+        tk.Button(janela_lista, text="Remover Modalidade", bootstyle="warning", command= lambda: teste.remover_modalidade(txt_area, self.modalidades, nome_modalidade)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
     def remover_aluno(self):
         pass
 

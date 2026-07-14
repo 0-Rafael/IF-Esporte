@@ -25,6 +25,20 @@ class Modalidades:
         }
         with open(self.caminho, "w", encoding="utf-8") as arquivo:
             json.dump(modalidades, arquivo, indent=4)
+    def remover_modalidade(self, esporte):
+        dados = self.ver_modalidades()
+
+        esporte = esporte.capitalize()
+        
+        if esporte in dados:
+            del dados[esporte]
+
+            with open(self.caminho, "w", encoding="utf-8") as arquivo:
+                json.dump(dados, arquivo, indent=4)
+
+            return True
+
+        return False
     def adiionar_aluno(self, nome: str, matricula: str, esporte: str):
         try:
             esporte = esporte.capitalize()
