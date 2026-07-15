@@ -343,7 +343,7 @@ class JanelaCadastro:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira",]
+        dias_semana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira"]
         info = self.modalidades.ver_modalidades()
 
         for dia in dias_semana:
@@ -355,6 +355,7 @@ class JanelaCadastro:
                 text=f"{dia}",
                 font=("Helvetica", 11, "bold")
             ).pack(anchor="w", padx=10, pady=(10, 5))
+            
             area_modalidades = tk.Frame(card)
             area_modalidades.pack(fill="x", padx=10, pady=(0, 10))
             dia_curto = dia.split('-')[0]
@@ -363,6 +364,7 @@ class JanelaCadastro:
             for nome_modalidade, dados_modalidade in info.items():
                 if dia_curto in dados_modalidade['Datas']:
                     modalidades_do_dia.append(nome_modalidade)
+                    
             if modalidades_do_dia:
                 for mod in modalidades_do_dia:
                     tk.Label(
@@ -373,8 +375,14 @@ class JanelaCadastro:
             else:
                 tk.Label(
                     area_modalidades,
-                    text="Sem treinos agendados",
+                    text="Sem modalidades nesta data",
                     font=("Helvetica", 10, "italic"),
-                    fg="gray"
+                    foreground="black"
                 ).pack(anchor="w", padx=10)
-        tk.Button(janela_cal, text="Voltar", command=janela_cal.destroy, bootstyle="primary-outline").pack(fill=X, padx=35)
+                
+        tk.Button(
+            janela_cal, 
+            text="Voltar", 
+            command=janela_cal.destroy, 
+            bootstyle="primary-outline"
+        ).pack(fill="x", padx=35, pady=10) 

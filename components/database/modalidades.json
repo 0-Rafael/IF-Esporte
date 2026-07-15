@@ -13,17 +13,6 @@
             "Quinta"
         ]
     },
-    "Handebol": {
-        "alunos": [],
-        "QuantidadeVagas": 30,
-        "ProfessorResponsavel": "Ynaiara",
-        "Datas": [
-            "Segunda",
-            "Ter\u00e7a",
-            "Quarta",
-            "Quinta"
-        ]
-    },
     "Futsal": {
         "alunos": [],
         "QuantidadeVagas": 20,
