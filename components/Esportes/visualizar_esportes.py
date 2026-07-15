@@ -308,9 +308,9 @@ class JanelaCadastro:
         
         tk.Button(janela_lista, text="Voltar", command=janela_lista.destroy, bootstyle="secondary").pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
 
-        tk.Button(janela_lista, text="Remover Aluno", bootstyle="warning", command=lambda: teste.remover_aluno(txt_area, self.modalidades, nome_modalidade, callback=recarregar_apos_remover, callback_atualizacao_principal=self.criar_botoes)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
+        tk.Button(janela_lista, text="Remover Aluno", bootstyle="danger", command=lambda: teste.remover_aluno(txt_area, self.modalidades, nome_modalidade, callback=recarregar_apos_remover, callback_atualizacao_principal=self.criar_botoes)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
 
-        tk.Button(janela_lista, text="Remover Modalidade", bootstyle="warning", command= lambda: teste.remover_modalidade(txt_area, self.modalidades, nome_modalidade, callback=recarregar_apos_remover, callback_atualizacao_principal=self.criar_botoes)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
+        tk.Button(janela_lista, text="Remover Modalidade", bootstyle="danger", command= lambda: teste.remover_modalidade(txt_area, self.modalidades, nome_modalidade, callback=recarregar_apos_remover, callback_atualizacao_principal=self.criar_botoes)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
 
     def abrir_calendario(self):
         janela_cal = tk.Toplevel(self.janela)
