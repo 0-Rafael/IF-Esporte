@@ -1,7 +1,12 @@
 {
     "Futebol masculino": {
-        "alunos": [],
-        "QuantidadeVagas": 20,
+        "alunos": [
+            {
+                "nome": "Davi",
+                "matricula": "20251174010010"
+            }
+        ],
+        "QuantidadeVagas": 19,
         "ProfessorResponsavel": "Nadson",
         "Datas": [
             "Ter\u00e7a",
@@ -19,13 +24,22 @@
             "Quinta"
         ]
     },
-    "Nata\u00e7\u00e3o": {
+    "Futsal": {
         "alunos": [],
-        "QuantidadeVagas": 8,
-        "ProfessorResponsavel": "Gabriel",
+        "QuantidadeVagas": 20,
+        "ProfessorResponsavel": "Nadson",
         "Datas": [
             "Quarta",
             "Quinta",
+            "Sexta"
+        ]
+    },
+    "Volei": {
+        "alunos": [],
+        "QuantidadeVagas": 20,
+        "ProfessorResponsavel": "Monica",
+        "Datas": [
+            "Quarta",
             "Sexta"
         ]
     }

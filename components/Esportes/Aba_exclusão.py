@@ -35,10 +35,19 @@ class Exclusao:
             
         except IndexError:
             messagebox.showwarning("Atenção", "Selecione um aluno para remover.", parent=self.janela)
-        except Exception as e:
-            messagebox.showerror("Erro", f"Erro ao remover: {str(e)}", parent=self.janela)
     def remover_modalidade(self, list_box: ttk.Listbox, instancia_modalidades: Modalidades, esporte: str, callback=None, callback_atualizacao_principal=None):
-        dados = instancia_modalidades.ver_modalidades()
-        del dados[esporte]
+        if not esporte:
+            messagebox.showwarning("Atenção", "Selecione uma modalidade para remover.", parent=self.janela)
+            return
+
         if esporte in instancia_modalidades.ver_modalidades():
             instancia_modalidades.remover_modalidade(esporte)
+            messagebox.showinfo("Sucesso", f"Modalidade {esporte} removida", parent=self.janela)
+        else:
+            messagebox.showerror("Erro", "Modalidade não encontrada.", parent=self.janela)
+            return
+        if callback:
+            callback()
+
+        if callback_atualizacao_principal:
+            callback_atualizacao_principal()

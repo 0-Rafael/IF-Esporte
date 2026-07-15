@@ -33,7 +33,6 @@ class JanelaCadastro:
         
         self.container_lista = tk.Frame(janela)
         self.container_lista.pack(fill=BOTH, expand=True, padx=40, pady=(0, 20))
-
         self.canvas = tk.Canvas(self.container_lista, bd=0, highlightthickness=0)
         self.scrollbar = tk.Scrollbar(self.container_lista, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
@@ -46,7 +45,6 @@ class JanelaCadastro:
             "<Configure>",
             lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
         )
-        
         self.canvas.bind(
             "<Configure>",
             lambda e: self.canvas.itemconfig(self.canvas_window, width=e.width)
@@ -54,10 +52,8 @@ class JanelaCadastro:
 
         self.canvas.pack(side=LEFT, fill=BOTH, expand=True)
         self.scrollbar.pack(side=RIGHT, fill=Y)
-
         self.criar_botoes()
         self.criar_footer()
-
     def criar_botoes(self):
         for botao in self.frame_botoes.winfo_children():
             botao.destroy()
@@ -137,17 +133,25 @@ class JanelaCadastro:
         nome = self.entry_nome.get().strip()
         matricula = self.entry_matricula.get().strip()
         teste = self.modalidades.verificar_quantidade_matricula(matricula)
+
         if not nome or not matricula:
             messagebox.showerror("Atenção", "Por favor, preencha todos os campos.", parent=self.janela_cadastro)
             return
+
         elif self.modalidades.cadastro_mesma_modalidade(matricula, modalidade):
             messagebox.showerror("Atenção", "O aluno já esta cadastrado nessa modalidade", parent=self.janela_cadastro)
             return
-        elif any(char.isdigit() for char in nome) or len(matricula) != 14 or not any(char.isnumeric() for char in matricula):
+
+        elif any(char.isdigit() for char in nome) or len(matricula) != 14:
             messagebox.showerror("Atenção", "Nome inválido ou matrícula deve ter 14 dígitos.", parent=self.janela_cadastro)
             return
+
         elif teste:
             messagebox.showerror("Atenção", "O aluno ja esta participando de duas modalidas", parent=self.janela_cadastro)
+            return
+
+        elif not all(char.isnumeric() for char in matricula):
+            messagebox.showerror("Atenção", "A matricula deve conter somente numeros", parent=self.janela_cadastro)
             return
 
         mensagem = f"Inscrição realizada!\n\nAluno: {nome}\nModalidade: {modalidade}\nMatrícula: {matricula}"
@@ -163,11 +167,9 @@ class JanelaCadastro:
         janela_nova.grab_set()
 
         tk.Label(janela_nova, text="Nova Modalidade", font=("Helvetica", 12, "bold"), bootstyle="success").pack(pady=20)
-
         tk.Label(janela_nova, text="Nome da Modalidade", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
         entrada_modalidade = tk.Entry(janela_nova, bootstyle="success")
         entrada_modalidade.pack(fill=X, padx=35, pady=(2, 12))
-
         tk.Label(janela_nova, text="Quantidade de Vagas", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
         entrada_vagas = tk.Entry(janela_nova, bootstyle="success")
         entrada_vagas.pack(fill=X, padx=35, pady=(2, 20))
@@ -175,7 +177,6 @@ class JanelaCadastro:
         tk.Label(janela_nova, text="Professor/monitor Responsável", font=("Helvetica", 9, "bold")).pack(anchor="w", padx=35)
         entrada_professor = tk.Entry(janela_nova, bootstyle="success")
         entrada_professor.pack(fill=X, padx=35, pady=(2, 20))
-
         calendario = SeletorDiasModalidade(janela_nova)
 
         def salvar_nova_modalidade():
@@ -183,6 +184,7 @@ class JanelaCadastro:
             vagas_str = entrada_vagas.get().strip()
             profesor = entrada_professor.get().strip()
             datas = calendario.obtener_dias_selecionados()
+
             if not nome_mod or not vagas_str.isdigit() or not profesor or datas==None:
                 messagebox.showerror("Erro", "Preencha todos os campos.", parent=janela_nova)
                 return
@@ -205,7 +207,6 @@ class JanelaCadastro:
 
         frame_botoes = tk.Frame(janela_lista)
         frame_botoes.pack(fill=X, padx=20, pady=5)
-
         scrollbar_botoes = tk.Scrollbar(frame_botoes)
         scrollbar_botoes.pack(side=RIGHT, fill=Y)
 
@@ -221,30 +222,30 @@ class JanelaCadastro:
         container_botoes.pack(side=LEFT, fill=X, expand=True)
         scrollbar_botoes.config(command=container_botoes.yview)
         texto_modalidade = tk.Label(janela_lista,text=nome_modalidade.upper(), font=("Helvetica", 12, "bold"), bootstyle="info")
+        texto_responsavel = tk.Label(janela_lista, font=("Helvetica", 10, "bold"), bootstyle="info")
+
         texto_modalidade.pack(pady=10)
+        texto_responsavel.pack(pady=10)
         area_teste = tk.Frame(janela_lista)
         area_teste.pack(fill=X, pady=5)
+
         txt_area = ttk.Listbox(area_teste)
         txt_area.pack(fill=BOTH, expand=True, padx=20, pady=10)
         txt_area.insert(END, "Clique em uma das modalidades acima para ver os alunos matriculados.")
         txt_area.config(state=DISABLED)
-        
         dados = self.modalidades.ver_modalidades()
 
         def exibir_alunos_da_modalidade(modalidade_selecionada):
             nonlocal nome_modalidade
-            # Recarregar dados do arquivo
             dados.update(self.modalidades.ver_modalidades())
             
-            # Limpar o Listbox corretamente
             txt_area.config(state=NORMAL)
             txt_area.delete(0, END)
             
             alunos = dados[modalidade_selecionada]['alunos']
             nome_modalidade = modalidade_selecionada
             texto_modalidade.configure(text=nome_modalidade.upper())
-            # Adicionar título
-            # txt_area.insert(END, f"--- {modalidade_selecionada.upper()} ---")
+            texto_responsavel.configure(text="RESPONSAVEL: " + dados[modalidade_selecionada]["ProfessorResponsavel"])
             
             if not alunos:
                 txt_area.insert(END, "Nenhum aluno matriculado.")
@@ -269,14 +270,47 @@ class JanelaCadastro:
         container_botoes.config(state=DISABLED)
         
         def recarregar_apos_remover():
-            if nome_modalidade:
+            nonlocal container_botoes
+            nonlocal dados
+            nonlocal nome_modalidade
+
+            dados.clear()
+            dados.update(self.modalidades.ver_modalidades())
+
+            container_botoes.config(state=NORMAL)
+            container_botoes.delete("1.0", END)
+
+            if nome_modalidade not in dados:
+                nome_modalidade = ""
+                texto_modalidade.configure(text="")
+                texto_responsavel.configure(text="")
+
+                txt_area.config(state=NORMAL)
+                txt_area.delete(0, END)
+                txt_area.insert(END, "Clique em uma das modalidades acima para ver os alunos matriculados.")
+                txt_area.config(state=DISABLED)
+            else:
                 exibir_alunos_da_modalidade(nome_modalidade)
+
+            for mod in dados:
+                btn = tk.Button(
+                    container_botoes,
+                    text=mod.upper(),
+                    bootstyle="outline-info",
+                    command=lambda m=mod: exibir_alunos_da_modalidade(m),
+                    cursor="hand2",
+                    padding=2
+                )
+                container_botoes.window_create(END, window=btn)
+                container_botoes.insert(END, "  ")
+
+            container_botoes.config(state=DISABLED)            
         
         tk.Button(janela_lista, text="Voltar", command=janela_lista.destroy, bootstyle="secondary").pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
+
         tk.Button(janela_lista, text="Remover Aluno", bootstyle="warning", command=lambda: teste.remover_aluno(txt_area, self.modalidades, nome_modalidade, callback=recarregar_apos_remover, callback_atualizacao_principal=self.criar_botoes)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
-        tk.Button(janela_lista, text="Remover Modalidade", bootstyle="warning", command= lambda: teste.remover_modalidade(txt_area, self.modalidades, nome_modalidade)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
-    def remover_aluno(self):
-        pass
+
+        tk.Button(janela_lista, text="Remover Modalidade", bootstyle="warning", command= lambda: teste.remover_modalidade(txt_area, self.modalidades, nome_modalidade, callback=recarregar_apos_remover, callback_atualizacao_principal=self.criar_botoes)).pack(pady=5, padx=5, fill=X, side=LEFT, expand=True)
 
     def abrir_calendario(self):
         janela_cal = tk.Toplevel(self.janela)

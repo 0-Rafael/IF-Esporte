@@ -2,6 +2,7 @@ import json
 class Modalidades:
     def __init__(self,caminho:str):
         self.caminho = caminho
+
     def ver_modalidades(self):
         try:
             with open(self.caminho, "r", encoding="utf-8") as arquivo:
@@ -9,6 +10,7 @@ class Modalidades:
             return dados
         except (json.JSONDecodeError, FileNotFoundError):
             return {}
+        
     def adicionar_modalidades(self, modalidade: str, quantidade_vagas: int, professor: str, datas: list):
         modalidade = modalidade.capitalize()
         professor = professor.capitalize()
@@ -27,9 +29,7 @@ class Modalidades:
             json.dump(modalidades, arquivo, indent=4)
     def remover_modalidade(self, esporte):
         dados = self.ver_modalidades()
-
         esporte = esporte.capitalize()
-        
         if esporte in dados:
             del dados[esporte]
 
@@ -45,10 +45,13 @@ class Modalidades:
             nome = nome.capitalize()
             dados = self.ver_modalidades()
             aluno = {"nome": nome, "matricula": matricula}
+
             dados[esporte]["alunos"].append(aluno)
             dados[esporte]["QuantidadeVagas"] = dados[esporte]["QuantidadeVagas"] - 1
+
             with open(self.caminho, "w", encoding="utf-8") as arquivo:
                 json.dump(dados, arquivo, indent=4)
+
         except KeyError:
             print("Modalidade nao encontrada")
     def remover_aluno(self, nome, matricula, esporte):
@@ -65,8 +68,6 @@ class Modalidades:
                         json.dump(dados, arquivo, indent=4)
                     return True
         return False
-
-
 
     def verificar_quantidade_matricula(self, matricula: str):
         modalidades = self.ver_modalidades()
