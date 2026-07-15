@@ -16,7 +16,7 @@ class JanelaCadastro:
         self.banner = tk.Label(
             janela, 
             text="PORTAL ESPORTIVO", 
-            foreground="#aaaaaa",
+            foreground="#ffffff",
             font=("Helvetica", 14, "bold"), 
             background="#539839",
             anchor="center"
@@ -377,3 +377,4 @@ class JanelaCadastro:
                     font=("Helvetica", 10, "italic"),
                     fg="gray"
                 ).pack(anchor="w", padx=10)
+        tk.Button(janela_cal, text="Voltar", command=janela_cal.destroy, bootstyle="primary-outline").pack(fill=X, padx=35)
